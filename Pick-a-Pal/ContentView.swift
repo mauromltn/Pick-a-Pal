@@ -9,13 +9,26 @@ struct ContentView: View {
 	
 	var body: some View {
 		VStack {
+			VStack(spacing: 8) {
+				Image(systemName: "person.3.sequence.fill")
+					.foregroundStyle(.tint)
+					.symbolRenderingMode(.hierarchical)
+				Text("Pick-a-Pal")
+			}
+			.font(.title)
+			.bold()
+			
 			Text(pickedName.isEmpty ? " " : pickedName)
+				.font(.title2)
+				.bold()
+				.foregroundStyle(.tint)
 			
 			List {
 				ForEach(names, id: \.description) { name in
 					Text(name)
 				}
 			}
+			.clipShape(RoundedRectangle(cornerRadius: 8))
 			
 			TextField("Add Name", text: $nameToAdd)
 				.autocorrectionDisabled()
@@ -30,7 +43,7 @@ struct ContentView: View {
 			
 			Toggle("Remove when picked", isOn: $shouldRemovePickedName)
 			
-			Button("Pick Random Name") {
+			Button {
 				if let randomName = names.randomElement() {
 					pickedName = randomName
 					
@@ -41,7 +54,13 @@ struct ContentView: View {
 				} else {
 					pickedName = ""
 				}
+			} label: {
+				Text("Pick Random Name")
+					.padding(.vertical, 6)
+					.padding(.horizontal, 8)
 			}
+			.buttonStyle(.borderedProminent)
+			.font(.headline)
 		}
 		.padding()
 	}
