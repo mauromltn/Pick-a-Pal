@@ -6,6 +6,7 @@ struct ContentView: View {
 	@State private var nameToAdd = ""
 	@State private var pickedName = ""
 	@State private var shouldRemovePickedName = false
+	@State private var showAlert = false
 	
 	var body: some View {
 		VStack {
@@ -33,10 +34,20 @@ struct ContentView: View {
 			TextField("Add Name", text: $nameToAdd)
 				.autocorrectionDisabled()
 				.onSubmit {
-					if !nameToAdd.isEmpty {
-						names.append(nameToAdd)
-						nameToAdd = ""
+					let trimmedName = nameToAdd.trimmingCharacters(in: .whitespacesAndNewlines)
+					if !trimmedName.isEmpty {
+						if !names.contains(trimmedName) {
+							names.append(nameToAdd)
+							nameToAdd = ""
+						} else {
+							showAlert = true
+						}
 					}
+				}
+				.alert("Error", isPresented: $showAlert) {
+					Button("OK", role: .cancel) {}
+				} message: {
+					Text("Name already exists.")
 				}
 			
 			Divider()  // Adds a line between the TextField and the Button
